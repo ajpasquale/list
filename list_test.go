@@ -7,7 +7,7 @@ func TestNewNode(t *testing.T) {
 	if n == nil {
 		t.Fatal("should create new node")
 	}
-	if n.data != 1 {
+	if n.value == nil {
 		t.Fatal("should set data in node")
 	}
 }
@@ -63,8 +63,15 @@ func TestListPop(t *testing.T) {
 	list := New()
 	node := NewNode(19)
 	list.Add(node)
-	list.Pop()
-	list.Pop()
+	v := list.Pop()
+	if v == nil {
+		t.Fatal("should return a value")
+	}
+
+	v = list.Pop()
+	if v != nil {
+		t.Fatal("should return nil value")
+	}
 }
 
 func TestListPush(t *testing.T) {
@@ -107,13 +114,13 @@ func TestListPush(t *testing.T) {
 func TestListFirst(t *testing.T) {
 	list := New()
 	an := Node{
-		data: 1,
-		next: nil,
+		value: 1,
+		next:  nil,
 	}
 
 	pn := Node{
-		data: 2,
-		next: nil,
+		value: 2,
+		next:  nil,
 	}
 
 	if list.First() != nil {

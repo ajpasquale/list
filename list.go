@@ -3,8 +3,8 @@ package list
 
 // Node is an element in the list
 type Node struct {
-	data int
-	next *Node
+	value interface{}
+	next  *Node
 }
 
 // List represents a singly-linked list. The zero value for List is an empty list ready to use.
@@ -15,10 +15,10 @@ type List struct {
 }
 
 // NewNode returns a new node with it's next link pointing to nil
-func NewNode(d int) *Node {
+func NewNode(v interface{}) *Node {
 	n := &Node{
-		data: d,
-		next: nil,
+		value: v,
+		next:  nil,
 	}
 	return n
 }
@@ -45,14 +45,17 @@ func (list *List) Add(n *Node) {
 }
 
 // Pop should make the second node the new head
-func (list *List) Pop() {
+func (list *List) Pop() interface{} {
+	var tNode = list.head
 	if list.length != 0 {
 		list.head = list.head.next
 		list.length--
 		if list.length == 0 {
 			list.tail = nil
 		}
+		return tNode.value
 	}
+	return nil
 }
 
 // Push should add a new node to the head
@@ -73,4 +76,9 @@ func (list *List) Len() int {
 // First returns the current head of the list
 func (list *List) First() *Node {
 	return list.head
+}
+
+// Last returns the current tail of the list
+func (list *List) Last() *Node {
+	return list.tail
 }
