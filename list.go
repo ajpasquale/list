@@ -1,4 +1,4 @@
-//Package list implements a simple singlely linked list.
+//Package list implements a simple singly-linked list.
 package list
 
 type Node struct {
