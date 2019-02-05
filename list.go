@@ -1,26 +1,13 @@
 // Package list implements a simple singly-linked list.
 package list
 
-// Node is an element in the list
-type Node struct {
-	value interface{}
-	next  *Node
-}
+import "errors"
 
 // List represents a singly-linked list. The zero value for List is an empty list ready to use.
 type List struct {
-	head   *Node
-	tail   *Node
+	head   *Element
+	tail   *Element
 	length int
-}
-
-// NewNode returns a new node with it's next link pointing to nil
-func NewNode(v interface{}) *Node {
-	n := &Node{
-		value: v,
-		next:  nil,
-	}
-	return n
 }
 
 // New return a new list with head/tail pointing to nil
@@ -34,51 +21,53 @@ func New() *List {
 }
 
 // Add should append a node to the end of the list
-func (list *List) Add(n *Node) {
-	if list.length == 0 {
-		list.head = n
+func (l *List) Add(v int) {
+	e := newElement(v)
+	if l.length == 0 {
+		l.head = e
 	} else {
-		list.tail.next = n
+		l.tail.next = e
 	}
-	list.tail = n
-	list.length++
+	l.tail = e
+	l.length++
 }
 
 // Pop should make the second node the new head
-func (list *List) Pop() interface{} {
-	var tNode = list.head
-	if list.length != 0 {
-		list.head = list.head.next
-		list.length--
-		if list.length == 0 {
-			list.tail = nil
+func (l *List) Pop() (int, error) {
+	e := l.head
+	if l.length != 0 {
+		l.head = l.head.next
+		l.length--
+		if l.length == 0 {
+			l.tail = nil
 		}
-		return tNode.value
+		return e.value, nil
 	}
-	return nil
+	return 0, errors.New("list is empty")
 }
 
 // Push should add a new node to the head
-func (list *List) Push(n *Node) {
-	n.next = list.head
-	list.head = n
-	if list.length == 0 {
-		list.tail = n
+func (l *List) Push(v int) {
+	e := newElement(v)
+	e.next = l.head
+	l.head = e
+	if l.length == 0 {
+		l.tail = e
 	}
-	list.length++
+	l.length++
 }
 
 // Len returns the current size/length of the list
-func (list *List) Len() int {
-	return list.length
+func (l *List) Len() int {
+	return l.length
 }
 
 // First returns the current head of the list
-func (list *List) First() *Node {
-	return list.head
+func (l *List) First() *Element {
+	return l.head
 }
 
 // Last returns the current tail of the list
-func (list *List) Last() *Node {
-	return list.tail
+func (l *List) Last() *Element {
+	return l.tail
 }

@@ -2,140 +2,76 @@ package list
 
 import "testing"
 
-func TestNewNode(t *testing.T) {
-	n := NewNode(1)
-	if n == nil {
-		t.Fatal("should create new node")
-	}
-	if n.value == nil {
-		t.Fatal("should set data in node")
-	}
-}
-
 func TestNewList(t *testing.T) {
 	l := New()
 	if l == nil {
-		t.Fatal("should create a new list")
-	}
-	if l.head != nil {
-		t.Fatal("head should be empty")
-	}
-	if l.tail != nil {
-		t.Fatal("tail should be empty")
+		t.Fatal("should return new list")
 	}
 	if l.Len() != 0 {
-		t.Fatal("list should have zero length")
+		t.Fatal("should return length zero")
+	}
+	if l.First() != nil {
+		t.Fatal("should return nil head")
+	}
+	if l.Last() != nil {
+		t.Fatal("should return nil tail")
 	}
 }
 
 func TestListAdd(t *testing.T) {
-	list := New()
-	node := NewNode(19)
-
-	list.Add(node)
-
-	if list.head != node {
-		t.Fatal("should reference the same object")
+	l := New()
+	for i := 0; i < 100; i++ {
+		l.Add(i)
 	}
-	if list.tail != node {
-		t.Fatal("should reference the same object")
-	}
-	if list.length != 1 {
-		t.Fatal("should have a length of one")
-	}
-
-	node2 := NewNode(666)
-
-	list.Add(node2)
-
-	if list.head == node2 {
-		t.Fatal("should not reference same object")
-	}
-	if list.tail != node2 {
-		t.Fatal("should reference the same object")
-	}
-	if list.Len() != 2 {
-		t.Fatal("should have a length of two")
+	if l.Last().value != 99 {
+		t.Fatal("last element should be 99")
 	}
 }
 
 func TestListPop(t *testing.T) {
-	list := New()
-	node := NewNode(19)
-	list.Add(node)
-	v := list.Pop()
-	if v == nil {
-		t.Fatal("should return a value")
+	l := New()
+	for i := 0; i < 100; i++ {
+		l.Add(i)
 	}
-
-	v = list.Pop()
-	if v != nil {
-		t.Fatal("should return nil value")
+	for i := 0; i < 100; i++ {
+		v, _ := l.Pop()
+		if v != i {
+			t.Fatal("should return the same value")
+		}
+	}
+	if l.Len() != 0 {
+		t.Fatal("should be length zero")
+	}
+	if l.First() != nil {
+		t.Fatal("should be nil")
+	}
+	if l.Last() != nil {
+		t.Fatal("should be nil")
+	}
+	v, err := l.Pop()
+	if err == nil {
+		t.Fatal("should not be nil")
+	}
+	if v != 0 {
+		t.Fatal("should be zero")
 	}
 }
 
 func TestListPush(t *testing.T) {
-	list := New()
-
-	nodes := []Node{
-		{0, nil},
-		{1, nil},
-		{2, nil},
-		{3, nil},
-		{4, nil},
-		{5, nil},
-		{6, nil},
-		{7, nil},
-		{8, nil},
-		{9, nil},
-	}
-
-	for i, n := range nodes {
-		list.Push(&n)
-		if list.head == nil {
-			t.Fatal("should be set after push")
-		} else if list.head != &n {
-			t.Fatal("should reference the current object")
-		}
-		if list.tail == nil {
-			t.Fatal("should be set after push")
-		}
-		if list.Len() == 1 {
-			if list.head != list.tail {
-				t.Fatal("should reference the same object")
-			}
-		}
-		if list.Len() != i+1 {
-			t.Fatal("should have the same length")
+	l := New()
+	for i := 0; i < 100; i++ {
+		l.Push(i)
+		if l.First().value != i {
+			t.Fatal("should be the same value")
 		}
 	}
-}
-
-func TestListFirst(t *testing.T) {
-	list := New()
-	an := Node{
-		value: 1,
-		next:  nil,
+	if l.Len() != 100 {
+		t.Fatal("should have a length ninty-nine")
 	}
-
-	pn := Node{
-		value: 2,
-		next:  nil,
+	if l.Last().value != 0 {
+		t.Fatal("element should contain value zero")
 	}
-
-	if list.First() != nil {
-		t.Fatal("should not be set yet")
-	}
-
-	list.Add(&an)
-
-	if list.First() != &an {
-		t.Fatal("should reference to the same object")
-	}
-
-	list.Push(&pn)
-
-	if list.First() != &pn {
-		t.Fatal("should reference the current object")
+	if l.First().value != 99 {
+		t.Fatal("should contain value of ninty-nine")
 	}
 }
