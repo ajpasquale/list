@@ -23,7 +23,7 @@ func TestNewList(t *testing.T) {
 	if l.tail != nil {
 		t.Fatal("tail should be empty")
 	}
-	if l.len() != 0 {
+	if l.Len() != 0 {
 		t.Fatal("list should have zero length")
 	}
 }
@@ -32,7 +32,7 @@ func TestListAdd(t *testing.T) {
 	list := New()
 	node := NewNode(19)
 
-	list.add(node)
+	list.Add(node)
 
 	if list.head != node {
 		t.Fatal("should reference the same object")
@@ -46,7 +46,7 @@ func TestListAdd(t *testing.T) {
 
 	node2 := NewNode(666)
 
-	list.add(node2)
+	list.Add(node2)
 
 	if list.head == node2 {
 		t.Fatal("should not reference same object")
@@ -54,7 +54,7 @@ func TestListAdd(t *testing.T) {
 	if list.tail != node2 {
 		t.Fatal("should reference the same object")
 	}
-	if list.len() != 2 {
+	if list.Len() != 2 {
 		t.Fatal("should have a length of two")
 	}
 }
@@ -62,9 +62,9 @@ func TestListAdd(t *testing.T) {
 func TestListPop(t *testing.T) {
 	list := New()
 	node := NewNode(19)
-	list.add(node)
-	list.pop()
-	list.pop()
+	list.Add(node)
+	list.Pop()
+	list.Pop()
 }
 
 func TestListPush(t *testing.T) {
@@ -84,7 +84,7 @@ func TestListPush(t *testing.T) {
 	}
 
 	for i, n := range nodes {
-		list.push(&n)
+		list.Push(&n)
 		if list.head == nil {
 			t.Fatal("should be set after push")
 		} else if list.head != &n {
@@ -93,12 +93,12 @@ func TestListPush(t *testing.T) {
 		if list.tail == nil {
 			t.Fatal("should be set after push")
 		}
-		if list.len() == 1 {
+		if list.Len() == 1 {
 			if list.head != list.tail {
 				t.Fatal("should reference the same object")
 			}
 		}
-		if list.len() != i+1 {
+		if list.Len() != i+1 {
 			t.Fatal("should have the same length")
 		}
 	}
@@ -116,19 +116,19 @@ func TestListFirst(t *testing.T) {
 		next: nil,
 	}
 
-	if list.first() != nil {
+	if list.First() != nil {
 		t.Fatal("should not be set yet")
 	}
 
-	list.add(&an)
+	list.Add(&an)
 
-	if list.first() != &an {
+	if list.First() != &an {
 		t.Fatal("should reference to the same object")
 	}
 
-	list.push(&pn)
+	list.Push(&pn)
 
-	if list.first() != &pn {
+	if list.First() != &pn {
 		t.Fatal("should reference the current object")
 	}
 }
