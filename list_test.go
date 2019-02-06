@@ -75,3 +75,31 @@ func TestListPush(t *testing.T) {
 		t.Fatal("should contain value of ninty-nine")
 	}
 }
+
+func TestListFind(t *testing.T) {
+	l := New()
+	for i := 0; i < 100; i++ {
+		l.Add(i)
+	}
+	v, err := l.Find(20)
+	if err != nil {
+		t.Fatal("should find this value")
+	}
+	if v.Value() != 20 {
+		t.Fatal("should be the same value")
+	}
+	v, err = l.Find(99999)
+	if err == nil {
+		t.Fatal("should not find this value")
+	}
+	if v != nil {
+		t.Fatal("should not exist")
+	}
+}
+func BenchmarkListFind(b *testing.B) {
+	l := New()
+	for i := 0; i < 10; i++ {
+		l.Add(i)
+	}
+	l.Find(2000)
+}

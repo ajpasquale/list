@@ -22,7 +22,7 @@ func New() *List {
 
 // Add should append a node to the end of the list
 func (l *List) Add(v int) {
-	e := newElement(v)
+	e := new(v)
 	if l.length == 0 {
 		l.head = e
 	} else {
@@ -48,7 +48,7 @@ func (l *List) Pop() (int, error) {
 
 // Push should add a new node to the head
 func (l *List) Push(v int) {
-	e := newElement(v)
+	e := new(v)
 	e.next = l.head
 	l.head = e
 	if l.length == 0 {
@@ -70,4 +70,20 @@ func (l *List) First() *Element {
 // Last returns the current tail of the list
 func (l *List) Last() *Element {
 	return l.tail
+}
+
+// Find will return an element in the list based on it's value
+func (l *List) Find(v int) (*Element, error) {
+	var ce *Element
+	ce = l.head
+	for {
+		if ce == nil {
+			return nil, errors.New("the value is not in this list")
+		}
+		if ce.value == v {
+			break
+		}
+		ce = ce.Next()
+	}
+	return ce, nil
 }
