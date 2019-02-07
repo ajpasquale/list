@@ -7,7 +7,7 @@ func TestNewList(t *testing.T) {
 	if l == nil {
 		t.Fatal("should return new list")
 	}
-	if l.Len() != 0 {
+	if l.Size() != 0 {
 		t.Fatal("should return length zero")
 	}
 	if l.First() != nil {
@@ -39,7 +39,7 @@ func TestListPop(t *testing.T) {
 			t.Fatal("should return the same value")
 		}
 	}
-	if l.Len() != 0 {
+	if l.Size() != 0 {
 		t.Fatal("should be length zero")
 	}
 	if l.First() != nil {
@@ -65,7 +65,7 @@ func TestListPush(t *testing.T) {
 			t.Fatal("should be the same value")
 		}
 	}
-	if l.Len() != 100 {
+	if l.Size() != 100 {
 		t.Fatal("should have a length ninty-nine")
 	}
 	if l.Last().value != 0 {
@@ -96,6 +96,24 @@ func TestListFind(t *testing.T) {
 		t.Fatal("should not exist")
 	}
 }
+
+func TestListValues(t *testing.T) {
+	l := New()
+	want := []int{0, 1, 2, 3, 4, 5, 6, 7, 8, 9}
+	for i := 0; i < 10; i++ {
+		l.Add(i)
+	}
+	av := l.Values()
+	if av == nil {
+		t.Fatal("should not be nil")
+	}
+	for i := 0; i < len(want); i++ {
+		if av[i] != want[i] {
+			t.Fatal("should be the same value")
+		}
+	}
+}
+
 func BenchmarkListFind(b *testing.B) {
 	l := New()
 	for i := 0; i < 10; i++ {

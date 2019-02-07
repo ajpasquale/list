@@ -5,17 +5,17 @@ import "errors"
 
 // List represents a singly-linked list. The zero value for List is an empty list ready to use.
 type List struct {
-	head   *Element
-	tail   *Element
-	length int
+	head *Element
+	tail *Element
+	size int
 }
 
 // New return a new list with head/tail pointing to nil
 func New() *List {
 	l := &List{
-		head:   nil,
-		tail:   nil,
-		length: 0,
+		head: nil,
+		tail: nil,
+		size: 0,
 	}
 	return l
 }
@@ -23,22 +23,22 @@ func New() *List {
 // Add should append a node to the end of the list
 func (l *List) Add(v int) {
 	e := new(v)
-	if l.length == 0 {
+	if l.size == 0 {
 		l.head = e
 	} else {
 		l.tail.next = e
 	}
 	l.tail = e
-	l.length++
+	l.size++
 }
 
 // Pop should make the second node the new head
 func (l *List) Pop() (int, error) {
 	e := l.head
-	if l.length != 0 {
+	if l.size != 0 {
 		l.head = l.head.next
-		l.length--
-		if l.length == 0 {
+		l.size--
+		if l.size == 0 {
 			l.tail = nil
 		}
 		return e.value, nil
@@ -51,15 +51,44 @@ func (l *List) Push(v int) {
 	e := new(v)
 	e.next = l.head
 	l.head = e
-	if l.length == 0 {
+	if l.size == 0 {
 		l.tail = e
 	}
-	l.length++
+	l.size++
 }
 
-// Len returns the current size/length of the list
-func (l *List) Len() int {
-	return l.length
+// Find will return an element in the list based on it's value
+func (l *List) Find(v int) (*Element, error) {
+	var e *Element
+	e = l.head
+	for {
+		if e == nil {
+			return nil, errors.New("the value is not in this list")
+		}
+		if e.value == v {
+			break
+		}
+		e = e.Next()
+	}
+	return e, nil
+}
+
+// Values should return the value stored in all elements as a slice of ints
+func (l *List) Values() []int {
+	var vs []int
+	var e *Element
+	vs = make([]int, l.size, l.size)
+	e = l.head
+	for i := 0; i < l.size; i++ {
+		vs[i] = e.value
+		e = e.Next()
+	}
+	return vs
+}
+
+// Size returns the current size of the list
+func (l *List) Size() int {
+	return l.size
 }
 
 // First returns the current head of the list
@@ -70,20 +99,4 @@ func (l *List) First() *Element {
 // Last returns the current tail of the list
 func (l *List) Last() *Element {
 	return l.tail
-}
-
-// Find will return an element in the list based on it's value
-func (l *List) Find(v int) (*Element, error) {
-	var ce *Element
-	ce = l.head
-	for {
-		if ce == nil {
-			return nil, errors.New("the value is not in this list")
-		}
-		if ce.value == v {
-			break
-		}
-		ce = ce.Next()
-	}
-	return ce, nil
 }
