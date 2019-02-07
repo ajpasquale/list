@@ -1,8 +1,6 @@
 // Package list implements a simple singly-linked list.
 package list
 
-import "errors"
-
 // List represents a singly-linked list. The zero value for List is an empty list ready to use.
 type List struct {
 	head *Element
@@ -58,19 +56,17 @@ func (l *List) Push(v int) {
 }
 
 // Find will return an element in the list based on it's value
-func (l *List) Find(v int) (*Element, error) {
+func (l List) Find(v int) *Element {
 	var e *Element
-	e = l.head
 	for {
+		e = l.Pop()
 		if e == nil {
-			return nil, errors.New("the value is not in this list")
-		}
-		if e.value == v {
 			break
+		} else if e.value == v {
+			return e
 		}
-		e = e.Next()
 	}
-	return e, nil
+	return nil
 }
 
 // Values should return the value stored in all elements as a slice of ints

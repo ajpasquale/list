@@ -49,11 +49,8 @@ func TestListPop(t *testing.T) {
 		t.Fatal("should be nil")
 	}
 	v := l.Pop()
-	if v == nil {
+	if v != nil {
 		t.Fatal("should not be nil")
-	}
-	if v.Value() != 0 {
-		t.Fatal("should be zero")
 	}
 }
 
@@ -81,19 +78,16 @@ func TestListFind(t *testing.T) {
 	for i := 0; i < 100; i++ {
 		l.Add(i)
 	}
-	v, err := l.Find(20)
-	if err != nil {
+	v := l.Find(20)
+	if v == nil {
 		t.Fatal("should find this value")
 	}
 	if v.Value() != 20 {
 		t.Fatal("should be the same value")
 	}
-	v, err = l.Find(99999)
-	if err == nil {
-		t.Fatal("should not find this value")
-	}
+	v = l.Find(99999)
 	if v != nil {
-		t.Fatal("should not exist")
+		t.Fatal("should not find this value")
 	}
 }
 
