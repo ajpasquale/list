@@ -22,7 +22,7 @@ func New() *List {
 
 // Add should append a node to the end of the list
 func (l *List) Add(v int) {
-	e := new(v)
+	e := newElement(v)
 	if l.size == 0 {
 		l.head = e
 	} else {
@@ -32,8 +32,8 @@ func (l *List) Add(v int) {
 	l.size++
 }
 
-// Pop should make the second node the new head
-func (l *List) Pop() (int, error) {
+// Pop should make the second node the new head and return the popped element
+func (l *List) Pop() *Element {
 	e := l.head
 	if l.size != 0 {
 		l.head = l.head.next
@@ -41,14 +41,14 @@ func (l *List) Pop() (int, error) {
 		if l.size == 0 {
 			l.tail = nil
 		}
-		return e.value, nil
+		return e
 	}
-	return 0, errors.New("list is empty")
+	return nil
 }
 
 // Push should add a new node to the head
 func (l *List) Push(v int) {
-	e := new(v)
+	e := newElement(v)
 	e.next = l.head
 	l.head = e
 	if l.size == 0 {
@@ -74,14 +74,16 @@ func (l *List) Find(v int) (*Element, error) {
 }
 
 // Values should return the value stored in all elements as a slice of ints
-func (l *List) Values() []int {
+func (l List) Values() []int {
 	var vs []int
 	var e *Element
-	vs = make([]int, l.size, l.size)
-	e = l.head
-	for i := 0; i < l.size; i++ {
-		vs[i] = e.value
-		e = e.Next()
+	vs = make([]int, 0, l.size)
+	for {
+		e = l.Pop()
+		if e == nil {
+			break
+		}
+		vs = append(vs, e.Value())
 	}
 	return vs
 }

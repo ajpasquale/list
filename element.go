@@ -7,7 +7,7 @@ type Element struct {
 }
 
 // newElement returns a new node with it's next link pointing to nil
-func new(v int) *Element {
+func newElement(v int) *Element {
 	e := &Element{
 		value: v,
 		next:  nil,

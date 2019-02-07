@@ -34,8 +34,8 @@ func TestListPop(t *testing.T) {
 		l.Add(i)
 	}
 	for i := 0; i < 100; i++ {
-		v, _ := l.Pop()
-		if v != i {
+		v := l.Pop()
+		if v.Value() != i {
 			t.Fatal("should return the same value")
 		}
 	}
@@ -48,11 +48,11 @@ func TestListPop(t *testing.T) {
 	if l.Last() != nil {
 		t.Fatal("should be nil")
 	}
-	v, err := l.Pop()
-	if err == nil {
+	v := l.Pop()
+	if v == nil {
 		t.Fatal("should not be nil")
 	}
-	if v != 0 {
+	if v.Value() != 0 {
 		t.Fatal("should be zero")
 	}
 }
