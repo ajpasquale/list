@@ -79,7 +79,7 @@ func (l List) Values() []int {
 		if e == nil {
 			break
 		}
-		vs = append(vs, e.Value())
+		vs = append(vs, e.value)
 	}
 	return vs
 }
@@ -97,4 +97,24 @@ func (l *List) First() *Element {
 // Last returns the current tail of the list
 func (l *List) Last() *Element {
 	return l.tail
+}
+
+// Sort implement a simple bubble sort and returns a new List
+func (l List) Sort() List {
+	var nl List
+	vs := l.Values()
+	swapped := true
+	for swapped {
+		swapped = false
+		for i := 1; i < len(vs); i++ {
+			if vs[i-1] > vs[i] {
+				vs[i], vs[i-1] = vs[i-1], vs[i]
+				swapped = true
+			}
+		}
+	}
+	for _, v := range vs {
+		nl.Add(v)
+	}
+	return nl
 }

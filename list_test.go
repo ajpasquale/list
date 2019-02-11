@@ -1,6 +1,8 @@
 package list
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestNewList(t *testing.T) {
 	l := New()
@@ -17,7 +19,6 @@ func TestNewList(t *testing.T) {
 		t.Fatal("should return nil tail")
 	}
 }
-
 func TestListAdd(t *testing.T) {
 	l := New()
 	for i := 0; i < 100; i++ {
@@ -27,7 +28,6 @@ func TestListAdd(t *testing.T) {
 		t.Fatal("last element should be 99")
 	}
 }
-
 func TestListPop(t *testing.T) {
 	l := New()
 	for i := 0; i < 100; i++ {
@@ -53,7 +53,6 @@ func TestListPop(t *testing.T) {
 		t.Fatal("should not be nil")
 	}
 }
-
 func TestListPush(t *testing.T) {
 	l := New()
 	for i := 0; i < 100; i++ {
@@ -72,7 +71,6 @@ func TestListPush(t *testing.T) {
 		t.Fatal("should contain value of ninty-nine")
 	}
 }
-
 func TestListFind(t *testing.T) {
 	l := New()
 	for i := 0; i < 100; i++ {
@@ -90,7 +88,6 @@ func TestListFind(t *testing.T) {
 		t.Fatal("should not find this value")
 	}
 }
-
 func TestListValues(t *testing.T) {
 	l := New()
 	want := []int{0, 1, 2, 3, 4, 5, 6, 7, 8, 9}
@@ -107,7 +104,51 @@ func TestListValues(t *testing.T) {
 		}
 	}
 }
+func TestListSort(t *testing.T) {
+	l := New()
+	nl := l.Sort()
+	//// Empty Condition
+	//if nl.Size() != 0 {
+	//	t.Fatal("list should be empty")
+	//}
+	//// Already sorted condition
+	//for i := 0; i < 100; i++ {
+	//	l.Add(i)
+	//}
+	//nl = l.Sort()
+	//if nl.Size() != 100 {
+	//	t.Fatal("list is not the correct size")
+	//}
+	////Check already sorted list
+	//for i := 0; i < 100; i++ {
+	//	oe := l.Pop()
+	//	ne := nl.Pop()
+	//
+	//	if oe.Value() != ne.Value() {
+	//		t.Fatal("elements should have the same value")
+	//	}
+	//}
+	// Check reverse order
+	for i := 99; i >= 0; i-- {
+		l.Add(i)
+	}
+	nl = l.Sort()
+	if nl.Size() != 100 {
+		t.Fatal("list is not the correct size")
+	}
+	l = New()
+	for i := 0; i < 100; i++ {
+		l.Add(i)
+	}
+	for i := 0; i < 100; i++ {
+		oe := l.Pop()
+		ne := nl.Pop()
 
+		if oe.Value() != ne.Value() {
+			t.Fatal("elements should have the same value")
+		}
+	}
+}
 func BenchmarkListFind(b *testing.B) {
 	l := New()
 	for i := 0; i < 10; i++ {
