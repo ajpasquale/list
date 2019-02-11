@@ -1,3 +1,3 @@
 # list
 
-list package implements a really sweet linked list :)
+list package implements a singly linked list.
