@@ -3,8 +3,8 @@ package list
 
 // List represents a singly-linked list. The zero value for List is an empty list ready to use.
 type List struct {
-	head *Element
-	tail *Element
+	head *Node
+	tail *Node
 	size int
 }
 
@@ -20,50 +20,50 @@ func New() *List {
 
 // Add should append a node to the end of the list
 func (l *List) Add(v int) {
-	e := newElement(v)
+	n := newNode(v)
 	if l.size == 0 {
-		l.head = e
+		l.head = n
 	} else {
-		l.tail.next = e
+		l.tail.next = n
 	}
-	l.tail = e
+	l.tail = n
 	l.size++
 }
 
-// Pop should make the second node the new head and return the popped element
-func (l *List) Pop() *Element {
-	e := l.head
+// Pop should make the second node the new head and return the popped node
+func (l *List) Pop() *Node {
+	n := l.head
 	if l.size != 0 {
 		l.head = l.head.next
 		l.size--
 		if l.size == 0 {
 			l.tail = nil
 		}
-		return e
+		return n
 	}
 	return nil
 }
 
 // Push should add a new node to the head
 func (l *List) Push(v int) {
-	e := newElement(v)
-	e.next = l.head
-	l.head = e
+	n := newNode(v)
+	n.next = l.head
+	l.head = n
 	if l.size == 0 {
-		l.tail = e
+		l.tail = n
 	}
 	l.size++
 }
 
-// Find will return an element in the list based on it's value
-func (l List) Find(v int) *Element {
-	var e *Element
+// Find will return a node in the list based on it's value
+func (l List) Find(v int) *Node {
+	var n *Node
 	for {
-		e = l.Pop()
-		if e == nil {
+		n = l.Pop()
+		if n == nil {
 			break
-		} else if e.value == v {
-			return e
+		} else if n.value == v {
+			return n
 		}
 	}
 	return nil
@@ -72,14 +72,14 @@ func (l List) Find(v int) *Element {
 // Values should return the value stored in all elements as a slice of ints
 func (l List) Values() []int {
 	var vs []int
-	var e *Element
+	var n *Node
 	vs = make([]int, 0, l.size)
 	for {
-		e = l.Pop()
-		if e == nil {
+		n = l.Pop()
+		if n == nil {
 			break
 		}
-		vs = append(vs, e.value)
+		vs = append(vs, n.value)
 	}
 	return vs
 }
@@ -90,12 +90,12 @@ func (l *List) Size() int {
 }
 
 // First returns the current head of the list
-func (l *List) First() *Element {
+func (l *List) First() *Node {
 	return l.head
 }
 
 // Last returns the current tail of the list
-func (l *List) Last() *Element {
+func (l *List) Last() *Node {
 	return l.tail
 }
 

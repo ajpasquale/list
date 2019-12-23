@@ -107,28 +107,6 @@ func TestListValues(t *testing.T) {
 func TestListSort(t *testing.T) {
 	l := New()
 	nl := l.Sort()
-	//// Empty Condition
-	//if nl.Size() != 0 {
-	//	t.Fatal("list should be empty")
-	//}
-	//// Already sorted condition
-	//for i := 0; i < 100; i++ {
-	//	l.Add(i)
-	//}
-	//nl = l.Sort()
-	//if nl.Size() != 100 {
-	//	t.Fatal("list is not the correct size")
-	//}
-	////Check already sorted list
-	//for i := 0; i < 100; i++ {
-	//	oe := l.Pop()
-	//	ne := nl.Pop()
-	//
-	//	if oe.Value() != ne.Value() {
-	//		t.Fatal("elements should have the same value")
-	//	}
-	//}
-	// Check reverse order
 	for i := 99; i >= 0; i-- {
 		l.Add(i)
 	}
@@ -147,6 +125,17 @@ func TestListSort(t *testing.T) {
 		if oe.Value() != ne.Value() {
 			t.Fatal("elements should have the same value")
 		}
+	}
+}
+
+func TestGetNextNode(t *testing.T) {
+	l := New()
+	for i := 0; i < 100; i++ {
+		l.Add(i)
+	}
+	n := l.First().Next()
+	if n.Value() != 1 {
+		t.Fatal("second found should contain a value of one")
 	}
 }
 func BenchmarkListFind(b *testing.B) {
