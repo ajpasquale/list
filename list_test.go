@@ -1,6 +1,7 @@
 package list
 
 import (
+	"math"
 	"testing"
 )
 
@@ -9,7 +10,7 @@ func TestNewList(t *testing.T) {
 	if l == nil {
 		t.Fatal("should return new list")
 	}
-	if l.Size() != 0 {
+	if l.Length() != 0 {
 		t.Fatal("should return length zero")
 	}
 	if l.First() != nil {
@@ -39,7 +40,7 @@ func TestListPop(t *testing.T) {
 			t.Fatal("should return the same value")
 		}
 	}
-	if l.Size() != 0 {
+	if l.Length() != 0 {
 		t.Fatal("should be length zero")
 	}
 	if l.First() != nil {
@@ -61,7 +62,7 @@ func TestListPush(t *testing.T) {
 			t.Fatal("should be the same value")
 		}
 	}
-	if l.Size() != 100 {
+	if l.Length() != 100 {
 		t.Fatal("should have a length ninty-nine")
 	}
 	if l.Last().value != 0 {
@@ -88,13 +89,13 @@ func TestListFind(t *testing.T) {
 		t.Fatal("should not find this value")
 	}
 }
-func TestListValues(t *testing.T) {
+func TestListToSlice(t *testing.T) {
 	l := New()
 	want := []int{0, 1, 2, 3, 4, 5, 6, 7, 8, 9}
 	for i := 0; i < 10; i++ {
 		l.Add(i)
 	}
-	av := l.Values()
+	av := l.ToSlice()
 	if av == nil {
 		t.Fatal("should not be nil")
 	}
@@ -104,31 +105,7 @@ func TestListValues(t *testing.T) {
 		}
 	}
 }
-func TestListSort(t *testing.T) {
-	l := New()
-	nl := l.Sort()
-	for i := 99; i >= 0; i-- {
-		l.Add(i)
-	}
-	nl = l.Sort()
-	if nl.Size() != 100 {
-		t.Fatal("list is not the correct size")
-	}
-	l = New()
-	for i := 0; i < 100; i++ {
-		l.Add(i)
-	}
-	for i := 0; i < 100; i++ {
-		oe := l.Pop()
-		ne := nl.Pop()
-
-		if oe.Value() != ne.Value() {
-			t.Fatal("elements should have the same value")
-		}
-	}
-}
-
-func TestGetNextNode(t *testing.T) {
+func TestListGetNextNode(t *testing.T) {
 	l := New()
 	for i := 0; i < 100; i++ {
 		l.Add(i)
@@ -138,9 +115,53 @@ func TestGetNextNode(t *testing.T) {
 		t.Fatal("second found should contain a value of one")
 	}
 }
-func BenchmarkListFind(b *testing.B) {
+func TestListTraverseTo(t *testing.T) {
+	var n *Node
+	l := New()
+	for i := 0; i < 100; i++ {
+		l.Add(i)
+	}
+	n = l.Traverse(2)
+	if n.Value() != 2 {
+		t.Fatal("The value at index two should be three")
+	}
+	n = l.Traverse(math.MinInt32)
+	if n != nil {
+		t.Fatal("The node should not exist")
+	}
+	n = l.Traverse(math.MaxInt64)
+	if n != nil {
+		t.Fatal("The node should not exist")
+	}
+}
+func TestListInsert(t *testing.T) {
 	l := New()
 	for i := 0; i < 10; i++ {
+		l.Add(i)
+	}
+	l.Insert(math.MaxInt32, 5)
+	if l.Traverse(5).value != math.MaxInt32 {
+		t.Fatal("The node should contain the inserted value")
+	}
+	if l.Insert(math.MaxInt32, math.MinInt32) != nil {
+		t.Fatal("The node should not be inserted")
+	}
+	if l.Insert(math.MaxInt32, math.MaxInt32) != l.Last() {
+		t.Fatal("The node should be inserted at the end of the last")
+	}
+}
+func TestListReverse(t *testing.T) {
+	l := New()
+	for i := 0; i < 10; i++ {
+		l.Add(i)
+	}
+	// if l.Reverse() == nil {
+	// 	t.Fatal("should return a new list")
+	// }
+}
+func BenchmarkListFind(b *testing.B) {
+	l := New()
+	for i := 0; i < 10000; i++ {
 		l.Add(i)
 	}
 	l.Find(2000)
