@@ -13,10 +13,10 @@ func TestNewList(t *testing.T) {
 	if l.Length() != 0 {
 		t.Fatal("should return length zero")
 	}
-	if l.First() != nil {
+	if l.Head() != nil {
 		t.Fatal("should return nil head")
 	}
-	if l.Last() != nil {
+	if l.Head() != nil {
 		t.Fatal("should return nil tail")
 	}
 }
@@ -25,7 +25,7 @@ func TestListAdd(t *testing.T) {
 	for i := 0; i < 100; i++ {
 		l.Add(i)
 	}
-	if l.Last().value != 99 {
+	if l.Tail().value != 99 {
 		t.Fatal("last element should be 99")
 	}
 }
@@ -43,10 +43,10 @@ func TestListPop(t *testing.T) {
 	if l.Length() != 0 {
 		t.Fatal("should be length zero")
 	}
-	if l.First() != nil {
+	if l.Head() != nil {
 		t.Fatal("should be nil")
 	}
-	if l.Last() != nil {
+	if l.Tail() != nil {
 		t.Fatal("should be nil")
 	}
 	v := l.Pop()
@@ -58,17 +58,17 @@ func TestListPush(t *testing.T) {
 	l := New()
 	for i := 0; i < 100; i++ {
 		l.Push(i)
-		if l.First().value != i {
+		if l.Head().value != i {
 			t.Fatal("should be the same value")
 		}
 	}
 	if l.Length() != 100 {
 		t.Fatal("should have a length ninty-nine")
 	}
-	if l.Last().value != 0 {
+	if l.Tail().value != 0 {
 		t.Fatal("element should contain value zero")
 	}
-	if l.First().value != 99 {
+	if l.Head().value != 99 {
 		t.Fatal("should contain value of ninty-nine")
 	}
 }
@@ -110,7 +110,7 @@ func TestListGetNextNode(t *testing.T) {
 	for i := 0; i < 100; i++ {
 		l.Add(i)
 	}
-	n := l.First().Next()
+	n := l.Head().Next()
 	if n.Value() != 1 {
 		t.Fatal("second found should contain a value of one")
 	}
@@ -118,7 +118,7 @@ func TestListGetNextNode(t *testing.T) {
 func TestListTraverseTo(t *testing.T) {
 	var n *Node
 	l := New()
-	for i := 0; i < 100; i++ {
+	for i := 0; i < 10; i++ {
 		l.Add(i)
 	}
 	n = l.Traverse(2)
@@ -133,6 +133,14 @@ func TestListTraverseTo(t *testing.T) {
 	if n != nil {
 		t.Fatal("The node should not exist")
 	}
+	n = l.Traverse(9)
+	if n.Value() != 9 {
+		t.Fatal("The value at this index should be ninty-nine")
+	}
+	n = l.Traverse(l.Length())
+	if n != nil {
+		t.Fatal("the node should not exist")
+	}
 }
 func TestListInsert(t *testing.T) {
 	l := New()
@@ -146,18 +154,37 @@ func TestListInsert(t *testing.T) {
 	if l.Insert(math.MaxInt32, math.MinInt32) != nil {
 		t.Fatal("The node should not be inserted")
 	}
-	if l.Insert(math.MaxInt32, math.MaxInt32) != l.Last() {
-		t.Fatal("The node should be inserted at the end of the last")
+	if l.Insert(math.MaxInt32, math.MaxInt32) != nil {
+		t.Fatal("The node should not be inserted")
 	}
 }
-func TestListReverse(t *testing.T) {
+func TestListRemove(t *testing.T) {
 	l := New()
 	for i := 0; i < 10; i++ {
 		l.Add(i)
 	}
-	// if l.Reverse() == nil {
-	// 	t.Fatal("should return a new list")
-	// }
+	if l.Remove(math.MinInt32) != nil {
+		t.Fatal("should not be removed")
+	}
+	if l.Remove(math.MaxInt32) != nil {
+		t.Fatal("should not be removed")
+	}
+	if l.Remove(0).value != 0 {
+		t.Fatal("should remove the head")
+	}
+	if l.Remove(l.length-1).value != 9 {
+		t.Fatal("should remove the tail node")
+	}
+	if l.Remove(l.length) != nil {
+		t.Fatal("node should not exist")
+	}
+}
+func TestListReverse(t *testing.T) {
+	l := New()
+	for i := 0; i < 4; i++ {
+		l.Add(i)
+	}
+	l.Reverse()
 }
 func BenchmarkListFind(b *testing.B) {
 	l := New()
